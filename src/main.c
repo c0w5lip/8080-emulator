@@ -5,23 +5,6 @@
 #include "../include/main.h"
 
 
-void NOP(Processor *p) {
-    puts("NOP called");
-    p->PC++;
-}
-
-void LXI_SP_d16(Processor *p) {
-    puts("LXI_SP_d16 called");
-
-    p->PC+=3;
-}
-
-void (*instructions[256])   (Processor*) = {
-    NOP,
-    [0x31] = LXI_SP_d16
-};
-
-
 int main(uint8_t argc, const char* argv[]) {
     
     if (argc != 2) {
@@ -36,42 +19,40 @@ int main(uint8_t argc, const char* argv[]) {
         return 1;
     }
 
-    fseek(program_file, 0, SEEK_END);
+    fseek(program_file, 0L, SEEK_END);
     uint64_t program_file_size = ftell(program_file);
-    rewind(program_file);
+    fseek(program_file, 0L, SEEK_SET);
 
-    uint8_t *program_file_buffer = malloc(program_file_size);
-
-    if (!program_file_buffer) {
-        perror("Couldn't allocate buffer");
-        fclose(program_file);
-        return 1;
-    }
 
 
     Processor *p = calloc(1, sizeof(Processor));
 
     p->memory = malloc(0x10000);
+    if (!p->memory) {
+        perror("Couldn't allocate memory");
+    }
+
     fread(p->memory, program_file_size, 1, program_file);
-
     fclose(program_file);
-    free(program_file_buffer);
 
-    for (p->PC = 0; p->PC < 16;) {
+    p->PC = 0;
+    while (p->PC < 16) { // while (!pc->is_halted) eventually
         uint8_t opcode = p->memory[p->PC]; // fetch
 
         printf("Fetching %2x\n", opcode);
 
         if (!instructions[opcode]) {
-            puts("Not supported!"); // all instructions have to be supported eventually
+            puts("Not supported!"); // all instructions must be supported eventually
             p->PC++;
             continue;
         }
 
         instructions[opcode](p); // execute
+        p->cycle_count += cycles[opcode];
     }
 
     free(p->memory);
+    free(p);
     
     return 0;
 }
