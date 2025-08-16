@@ -30,7 +30,7 @@ typedef struct Processor
 } Processor;
 
 
-extern const uint8_t cycles[256] = {
+const uint8_t cycles[256] = {
     4, 10, 7, 5, 5, 5, 7, 4, 4, 10, 7, 5, 5, 5, 7, 4,
 	4, 10, 7, 5, 5, 5, 7, 4, 4, 10, 7, 5, 5, 5, 7, 4,
 	4, 10, 16, 5, 5, 5, 7, 4, 4, 10, 16, 5, 5, 5, 7, 4,
@@ -56,6 +56,33 @@ void NOP(Processor *p) {
     p->PC++;
 }
 
+
+void MOV_BB(Processor *p) {
+    puts("MOV_BB called");
+
+    p->B = p->B;
+
+    p->PC++;
+}
+
+
+void MOV_BC(Processor *p) {
+    puts("MOV_BC called");
+
+    p->B = p->C;
+
+    p->PC++;
+}
+
+
+void MOV_BD(Processor *p) {
+    puts("MOV_BD called");
+
+    p->B = p->D;
+
+    p->PC++;
+}
+
 void LXI_SP(Processor *p) {
     puts("LXI_SP called");
 
@@ -74,6 +101,12 @@ void HTL(Processor *p) {
 void (*instructions[256])(Processor*) = {
     // 0x00 - 0x0f
     [0x00] = NOP,
+
+    [0x40] = MOV_BB,
+    [0x41] = MOV_BC,
+    [0x42] = MOV_BD,
+
     [0x31] = LXI_SP,
-    [0x76] = HTL
+
+    [0x76] = HTL 
 };

@@ -48,7 +48,7 @@ int main(uint8_t argc, const char* argv[]) {
         }
 
         instructions[opcode](p); // execute
-        p->cycle_count += cycles[opcode];
+        p->cycle_count += cycles[opcode]; // update cycles
     }
 
     free(p->memory);
