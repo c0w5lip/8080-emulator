@@ -30,6 +30,27 @@ typedef struct Processor
 } Processor;
 
 
+
+const uint8_t lengths[256] = {
+    1, 3, 1, 1, 1, 1, 2, 1, 1, 3, 1, 1, 1, 1, 2, 1,
+    1, 3, 1, 1, 1, 1, 2, 1, 1, 3, 1, 1, 1, 1, 2, 1,
+    1, 3, 3, 1, 1, 1, 2, 1, 1, 3, 3, 1, 1, 1, 2, 1,
+    1, 3, 3, 1, 1, 1, 2, 1, 1, 3, 3, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 3, 3, 3, 1, 2, 1, 1, 1, 3, 3, 3, 3, 2, 1,
+    1, 1, 3, 2, 3, 1, 2, 1, 1, 1, 3, 2, 3, 3, 2, 1,
+    1, 1, 3, 1, 3, 1, 2, 1, 1, 1, 1, 3, 1, 3, 3, 2,
+    1, 1, 3, 1, 3, 1, 2, 1, 1, 1, 1, 3, 1, 3, 3, 2
+};
+
+
 const uint8_t cycles[256] = {
     4, 10, 7, 5, 5, 5, 7, 4, 4, 10, 7, 5, 5, 5, 7, 4,
 	4, 10, 7, 5, 5, 5, 7, 4, 4, 10, 7, 5, 5, 5, 7, 4,
@@ -52,8 +73,6 @@ const uint8_t cycles[256] = {
 
 void NOP(Processor *p) {
     puts("NOP called");
-
-    p->PC++;
 }
 
 
@@ -61,8 +80,6 @@ void MOV_BB(Processor *p) {
     puts("MOV_BB called");
 
     p->B = p->B;
-
-    p->PC++;
 }
 
 
@@ -70,8 +87,6 @@ void MOV_BC(Processor *p) {
     puts("MOV_BC called");
 
     p->B = p->C;
-
-    p->PC++;
 }
 
 
@@ -79,22 +94,15 @@ void MOV_BD(Processor *p) {
     puts("MOV_BD called");
 
     p->B = p->D;
-
-    p->PC++;
 }
 
 void LXI_SP(Processor *p) {
     puts("LXI_SP called");
-
-
-    p->PC += 3;
 }
 
 
 void HTL(Processor *p) {
     p->is_halted = true;
-
-    p->PC++;
 }
 
 
@@ -102,9 +110,11 @@ void (*instructions[256])(Processor*) = {
     // 0x00 - 0x0f
     [0x00] = NOP,
 
-    [0x40] = MOV_BB,
-    [0x41] = MOV_BC,
-    [0x42] = MOV_BD,
+    [0x40] = MOV_BB, [0x41] = MOV_BC, [0x42] = MOV_BD, /*[0x43] = MOV_BE, [0x44] = MOV_BH, [0X45] = MOV_BL, [0x46] = MOV_BM, [0x47] = MOV_BA,
+    [0x48] = MOV_CB, [0x49] = MOV_CC, [0x4A] = MOV_CD, [0x4B] = MOV_CE, [0x4C] = MOV_CH, [0X4D] = MOV_CL, [0x4E] = MOV_CM, [0x4F] = MOV_CA,*/
+
+
+    
 
     [0x31] = LXI_SP,
 
