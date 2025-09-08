@@ -75,6 +75,7 @@ void NOP(Processor *p) {
     puts("NOP called");
 }
 
+/* MOVS */
 
 void MOV_BB(Processor *p) {
     puts("MOV_BB called");
@@ -96,6 +97,92 @@ void MOV_BD(Processor *p) {
     p->B = p->D;
 }
 
+void MOV_BE(Processor *p) {
+    puts("MOV_BE called");
+
+    p->B = p->E;
+}
+
+void MOV_BH(Processor *p) {
+    puts("MOV_BH called");
+
+    p->B = p->H;
+}
+
+void MOV_BL(Processor *p) {
+    puts("MOV_BL called");
+
+    p->B = p->L;
+}
+
+void MOV_BM(Processor *p) {
+    puts("MOV_BM called");
+    
+    p->B = p->memory[(p->H >> 8) | (p->L)];
+}
+
+void MOV_BA(Processor *p) {
+    puts("MOV_BA called");
+
+    p->B = p->A;
+}
+
+
+
+
+
+
+void MOV_CB(Processor *p) {
+    puts("MOV_CB called");
+
+    p->C = p->B;
+}
+
+void MOV_CC(Processor *p) {
+    puts("MOV_CC called");
+
+    p->C = p->C;
+}
+
+void MOV_CD(Processor *p) {
+    puts("MOV_CD called");
+
+    p->C = p->D;
+}
+
+void MOV_CE(Processor *p) {
+    puts("MOV_CE called");
+
+    p->C = p->E;
+}
+
+void MOV_CH(Processor *p) {
+    puts("MOV_CH called");
+
+    p->C = p->H;
+}
+
+void MOV_CL(Processor *p) {
+    puts("MOV_CL called");
+
+    p->C = p->L;
+}
+
+void MOV_CM(Processor *p) {
+    puts("MOV_CM called");
+
+    p->C = p->memory[(p->H >> 8) | (p->L)];
+}
+
+void MOV_CA(Processor *p) {
+    puts("MOV_CA called");
+
+    p->C = p->A;
+}
+
+
+/* */
+
 void LXI_SP(Processor *p) {
     puts("LXI_SP called");
 }
@@ -110,8 +197,9 @@ void (*instructions[256])(Processor*) = {
     // 0x00 - 0x0f
     [0x00] = NOP,
 
-    [0x40] = MOV_BB, [0x41] = MOV_BC, [0x42] = MOV_BD, /*[0x43] = MOV_BE, [0x44] = MOV_BH, [0X45] = MOV_BL, [0x46] = MOV_BM, [0x47] = MOV_BA,
-    [0x48] = MOV_CB, [0x49] = MOV_CC, [0x4A] = MOV_CD, [0x4B] = MOV_CE, [0x4C] = MOV_CH, [0X4D] = MOV_CL, [0x4E] = MOV_CM, [0x4F] = MOV_CA,*/
+    [0x40] = MOV_BB, [0x41] = MOV_BC, [0x42] = MOV_BD, [0x43] = MOV_BE, [0x44] = MOV_BH, [0X45] = MOV_BL, [0x46] = MOV_BM, [0x47] = MOV_BA,
+    [0x48] = MOV_CB, [0x49] = MOV_CC, [0x4A] = MOV_CD, [0x4B] = MOV_CE, [0x4C] = MOV_CH, [0X4D] = MOV_CL, [0x4E] = MOV_CM, [0x4F] = MOV_CA,
+    
 
 
     
