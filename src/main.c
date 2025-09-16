@@ -47,7 +47,7 @@ int main(uint8_t argc, const char* argv[]) {
             continue;
         }
 
-        instructions[opcode](p); // execute
+        instructions[opcode](p, opcode); // execute
 
         p->PC += lengths[opcode]; // increment pc
         p->cycle_count += cycles[opcode]; // update cycles

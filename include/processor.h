@@ -71,140 +71,214 @@ const uint8_t cycles[256] = {
 };
 
 
-void NOP(Processor *p) {
-    puts("NOP called");
+// functions with several opcodes associated
+
+void NOP(Processor *p) {}
+
+
+// functions unique opcode ref
+
+void MOV_B_B(Processor *p) { puts("MOV_B_B called"); p->B = p->B; }
+void MOV_B_C(Processor *p) { puts("MOV_B_C called"); p->B = p->C; }
+void MOV_B_D(Processor *p) { puts("MOV_B_D called"); p->B = p->D; }
+void MOV_B_E(Processor *p) { puts("MOV_B_E called"); p->B = p->E; }
+void MOV_B_H(Processor *p) { puts("MOV_B_H called"); p->B = p->H; }
+void MOV_B_L(Processor *p) { puts("MOV_B_L called"); p->B = p->L; }
+void MOV_B_M(Processor *p) { puts("MOV_B_M called"); uint16_t addr = ((uint16_t)p->H << 8) | p->L; p->B = p->memory[addr]; }
+void MOV_B_A(Processor *p) { puts("MOV_B_A called"); p->B = p->A; }
+
+void MOV_C_B(Processor *p) { puts("MOV_C_B called"); p->C = p->B; }
+void MOV_C_C(Processor *p) { puts("MOV_C_C called"); p->C = p->C; }
+void MOV_C_D(Processor *p) { puts("MOV_C_D called"); p->C = p->D; }
+void MOV_C_E(Processor *p) { puts("MOV_C_E called"); p->C = p->E; }
+void MOV_C_H(Processor *p) { puts("MOV_C_H called"); p->C = p->H; }
+void MOV_C_L(Processor *p) { puts("MOV_C_L called"); p->C = p->L; }
+void MOV_C_M(Processor *p) { puts("MOV_C_M called"); uint16_t addr = ((uint16_t)p->H << 8) | p->L; p->C = p->memory[addr]; }
+void MOV_C_A(Processor *p) { puts("MOV_C_A called"); p->C = p->A; }
+
+void MOV_D_B(Processor *p) { puts("MOV_D_B called"); p->D = p->B; }
+void MOV_D_C(Processor *p) { puts("MOV_D_C called"); p->D = p->C; }
+void MOV_D_D(Processor *p) { puts("MOV_D_D called"); p->D = p->D; }
+void MOV_D_E(Processor *p) { puts("MOV_D_E called"); p->D = p->E; }
+void MOV_D_H(Processor *p) { puts("MOV_D_H called"); p->D = p->H; }
+void MOV_D_L(Processor *p) { puts("MOV_D_L called"); p->D = p->L; }
+void MOV_D_M(Processor *p) { puts("MOV_D_M called"); p->D = p->memory[(p->H >> 8) | (p->L)]; }
+void MOV_D_A(Processor *p) { puts("MOV_D_A called"); p->D = p->A; }
+
+void MOV_E_B(Processor *p) { puts("MOV_E_B called"); p->E = p->B; }
+void MOV_E_C(Processor *p) { puts("MOV_E_C called"); p->E = p->C; }
+void MOV_E_D(Processor *p) { puts("MOV_E_D called"); p->E = p->D; }
+void MOV_E_E(Processor *p) { puts("MOV_E_E called"); p->E = p->E; }
+void MOV_E_H(Processor *p) { puts("MOV_E_H called"); p->E = p->H; }
+void MOV_E_L(Processor *p) { puts("MOV_E_L called"); p->E = p->L; }
+void MOV_E_M(Processor *p) { puts("MOV_E_M called"); p->E = p->memory[(p->H >> 8) | (p->L)]; }
+void MOV_E_A(Processor *p) { puts("MOV_E_A called"); p->E = p->A; }
+
+void MOV_H_B(Processor *p) { puts("MOV_H_B called"); p->H = p->B; }
+void MOV_H_C(Processor *p) { puts("MOV_H_C called"); p->H = p->C; }
+void MOV_H_D(Processor *p) { puts("MOV_H_D called"); p->H = p->D; }
+void MOV_H_E(Processor *p) { puts("MOV_H_E called"); p->H = p->E; }
+void MOV_H_H(Processor *p) { puts("MOV_H_H called"); p->H = p->H; }
+void MOV_H_L(Processor *p) { puts("MOV_H_L called"); p->H = p->L; }
+void MOV_H_M(Processor *p) { puts("MOV_H_M called"); p->H = p->memory[(p->H >> 8) | (p->L)]; }
+void MOV_H_A(Processor *p) { puts("MOV_H_A called"); p->H = p->A; }
+
+void MOV_L_B(Processor *p) { puts("MOV_L_B called"); p->L = p->B; }
+void MOV_L_C(Processor *p) { puts("MOV_L_C called"); p->L = p->C; }
+void MOV_L_D(Processor *p) { puts("MOV_L_D called"); p->L = p->D; }
+void MOV_L_E(Processor *p) { puts("MOV_L_E called"); p->L = p->E; }
+void MOV_L_H(Processor *p) { puts("MOV_L_H called"); p->L = p->H; }
+void MOV_L_L(Processor *p) { puts("MOV_L_L called"); p->L = p->L; }
+void MOV_L_M(Processor *p) { puts("MOV_L_M called"); p->L = p->memory[(p->H >> 8) | (p->L)]; }
+void MOV_L_A(Processor *p) { puts("MOV_L_A called"); p->L = p->A; }
+
+void MOV_M_B(Processor *p) { puts("MOV_M_B called"); p->memory[(p->H >> 8) | (p->L)] = p->B; }
+void MOV_M_C(Processor *p) { puts("MOV_M_C called"); p->memory[(p->H >> 8) | (p->L)] = p->C; }
+void MOV_M_D(Processor *p) { puts("MOV_M_D called"); p->memory[(p->H >> 8) | (p->L)] = p->D; }
+void MOV_M_E(Processor *p) { puts("MOV_M_E called"); p->memory[(p->H >> 8) | (p->L)] = p->E; }
+void MOV_M_H(Processor *p) { puts("MOV_M_H called"); p->memory[(p->H >> 8) | (p->L)] = p->H; }
+void MOV_M_L(Processor *p) { puts("MOV_M_L called"); p->memory[(p->H >> 8) | (p->L)] = p->L; }
+void HLT(Processor *p) { p->is_halted = true; }
+void MOV_M_A(Processor *p) { puts("MOV_M_A called"); p->memory[(p->H >> 8) | (p->L)] = p->A; }
+
+void MOV_A_B(Processor *p) { puts("MOV_A_B called"); p->A = p->B; }
+void MOV_A_C(Processor *p) { puts("MOV_A_C called"); p->A = p->C; }
+void MOV_A_D(Processor *p) { puts("MOV_A_D called"); p->A = p->D; }
+void MOV_A_E(Processor *p) { puts("MOV_A_E called"); p->A = p->E; }
+void MOV_A_H(Processor *p) { puts("MOV_A_H called"); p->A = p->H; }
+void MOV_A_L(Processor *p) { puts("MOV_A_L called"); p->A = p->L; }
+void MOV_A_M(Processor *p) { puts("MOV_A_M called"); p->A = p->memory[(p->H >> 8) | (p->L)]; }
+void MOV_A_A(Processor *p) { puts("MOV_A_A called"); p->A = p->A; }
+
+
+void MVI_B(Processor *p, unsigned char *opcode) { p->B = opcode[1]; }
+void MVI_C(Processor *p, unsigned char *opcode) { p->C = opcode[1]; }
+void MVI_D(Processor *p, unsigned char *opcode) { p->D = opcode[1]; }
+void MVI_E(Processor *p, unsigned char *opcode) { p->E = opcode[1]; }
+void MVI_H(Processor *p, unsigned char *opcode) { p->H = opcode[1]; }
+void MVI_L(Processor *p, unsigned char *opcode) { p->L = opcode[1]; }
+void MVI_M(Processor *p, unsigned char *opcode) { p->memory[(p->H >> 8) | (p->L)] = opcode[1]; }
+void MVI_A(Processor *p, unsigned char *opcode) { p->A = opcode[1]; }
+
+void LXI_B(Processor* p, unsigned char *opcode) { p->B = opcode[2]; p->C = opcode[1]; }
+void LXI_D(Processor* p, unsigned char *opcode) { p->D = opcode[2]; p->E = opcode[1]; }
+void LXI_H(Processor* p, unsigned char *opcode) { p->H = opcode[2]; p->L = opcode[1]; }
+void LXI_SP(Processor* p, unsigned char *opcode) { p->SP = (opcode[2] << 8) | opcode[1]; }
+
+void LDA(Processor *p, unsigned char *opcode) { p->A = p->memory[(opcode[2] << 8) | opcode[1]]; }
+void STA(Processor *p, unsigned char *opcode) { p->memory[(opcode[2] << 8) | opcode[1]] = p->A; }
+
+void LHLD(Processor *p, unsigned char *opcode) {
+    uint16_t address = (opcode[2] << 8) | opcode[1];
+
+    p->H = p->memory[address+1];
+    p->L = p->memory[address];
 }
 
-/* MOVS */
+void SHLD(Processor *p, unsigned char *opcode) {
+    uint16_t address = (opcode[2] << 8) | opcode[1];
 
-void MOV_BB(Processor *p) {
-    puts("MOV_BB called");
-
-    p->B = p->B;
-}
-
-
-void MOV_BC(Processor *p) {
-    puts("MOV_BC called");
-
-    p->B = p->C;
-}
-
-
-void MOV_BD(Processor *p) {
-    puts("MOV_BD called");
-
-    p->B = p->D;
-}
-
-void MOV_BE(Processor *p) {
-    puts("MOV_BE called");
-
-    p->B = p->E;
-}
-
-void MOV_BH(Processor *p) {
-    puts("MOV_BH called");
-
-    p->B = p->H;
-}
-
-void MOV_BL(Processor *p) {
-    puts("MOV_BL called");
-
-    p->B = p->L;
-}
-
-void MOV_BM(Processor *p) {
-    puts("MOV_BM called");
-    
-    p->B = p->memory[(p->H >> 8) | (p->L)];
-}
-
-void MOV_BA(Processor *p) {
-    puts("MOV_BA called");
-
-    p->B = p->A;
-}
-
-
-
-
-
-
-void MOV_CB(Processor *p) {
-    puts("MOV_CB called");
-
-    p->C = p->B;
-}
-
-void MOV_CC(Processor *p) {
-    puts("MOV_CC called");
-
-    p->C = p->C;
-}
-
-void MOV_CD(Processor *p) {
-    puts("MOV_CD called");
-
-    p->C = p->D;
-}
-
-void MOV_CE(Processor *p) {
-    puts("MOV_CE called");
-
-    p->C = p->E;
-}
-
-void MOV_CH(Processor *p) {
-    puts("MOV_CH called");
-
-    p->C = p->H;
-}
-
-void MOV_CL(Processor *p) {
-    puts("MOV_CL called");
-
-    p->C = p->L;
-}
-
-void MOV_CM(Processor *p) {
-    puts("MOV_CM called");
-
-    p->C = p->memory[(p->H >> 8) | (p->L)];
-}
-
-void MOV_CA(Processor *p) {
-    puts("MOV_CA called");
-
-    p->C = p->A;
-}
-
-
-/* */
-
-void LXI_SP(Processor *p) {
-    puts("LXI_SP called");
+    p->memory[address+1] = p->H;
+    p->memory[address] = p->L;
 }
 
 
-void HTL(Processor *p) {
-    p->is_halted = true;
-}
 
 
 void (*instructions[256])(Processor*) = {
-    // 0x00 - 0x0f
-    [0x00] = NOP,
+    /* 0x00 - 0x0F */
+    [0x00] = NOP, [0x01] = LXI_B, [0x02] = STAX_B, [0x03] = INX_B,
+    [0x04] = INR_B, [0x05] = DCR_B, [0x06] = MVI_B, [0x07] = RLC,
+    [0x08] = NOP, [0x09] = DAD_B, [0x0A] = LDAX_B, [0x0B] = DCX_B,
+    [0x0C] = INR_C, [0x0D] = DCR_C, [0x0E] = MVI_C, [0x0F] = RRC,
 
-    [0x40] = MOV_BB, [0x41] = MOV_BC, [0x42] = MOV_BD, [0x43] = MOV_BE, [0x44] = MOV_BH, [0X45] = MOV_BL, [0x46] = MOV_BM, [0x47] = MOV_BA,
-    [0x48] = MOV_CB, [0x49] = MOV_CC, [0x4A] = MOV_CD, [0x4B] = MOV_CE, [0x4C] = MOV_CH, [0X4D] = MOV_CL, [0x4E] = MOV_CM, [0x4F] = MOV_CA,
-    
+    /* 0x10 - 0x1F */
+    [0x10] = NOP, [0x11] = LXI_D, [0x12] = STAX_D, [0x13] = INX_D,
+    [0x14] = INR_D, [0x15] = DCR_D, [0x16] = MVI_D, [0x17] = RAL,
+    [0x18] = NOP, [0x19] = DAD_D, [0x1A] = LDAX_D, [0x1B] = DCX_D,
+    [0x1C] = INR_E, [0x1D] = DCR_E, [0x1E] = MVI_E, [0x1F] = RAR,
 
+    /* 0x20 - 0x2F */
+    [0x20] = NOP, [0x21] = LXI_H, [0x22] = SHLD, [0x23] = INX_H,
+    [0x24] = INR_H, [0x25] = DCR_H, [0x26] = MVI_H, [0x27] = DAA,
+    [0x28] = NOP, [0x29] = DAD_H, [0x2A] = LHLD, [0x2B] = DCX_H,
+    [0x2C] = INR_L, [0x2D] = DCR_L, [0x2E] = MVI_L, [0x2F] = CMA,
 
-    
+    /* 0x30 - 0x3F */
+    [0x30] = NOP, [0x31] = LXI_SP, [0x32] = STA, [0x33] = INX_SP,
+    [0x34] = INR_M, [0x35] = DCR_M, [0x36] = MVI_M, [0x37] = STC,
+    [0x38] = NOP, [0x39] = DAD_SP, [0x3A] = LDA, [0x3B] = DCX_SP,
+    [0x3C] = INR_A, [0x3D] = DCR_A, [0x3E] = MVI_A, [0x3F] = CMC,
 
-    [0x31] = LXI_SP,
+    /* 0x40 - 0x4F (MOV group) */
+    [0x40] = MOV_B_B, [0x41] = MOV_B_C, [0x42] = MOV_B_D, [0x43] = MOV_B_E,
+    [0x44] = MOV_B_H, [0x45] = MOV_B_L, [0x46] = MOV_B_M, [0x47] = MOV_B_A,
+    [0x48] = MOV_C_B, [0x49] = MOV_C_C, [0x4A] = MOV_C_D, [0x4B] = MOV_C_E,
+    [0x4C] = MOV_C_H, [0x4D] = MOV_C_L, [0x4E] = MOV_C_M, [0x4F] = MOV_C_A,
 
-    [0x76] = HTL 
+    /* 0x50 - 0x5F */
+    [0x50] = MOV_D_B, [0x51] = MOV_D_C, [0x52] = MOV_D_D, [0x53] = MOV_D_E,
+    [0x54] = MOV_D_H, [0x55] = MOV_D_L, [0x56] = MOV_D_M, [0x57] = MOV_D_A,
+    [0x58] = MOV_E_B, [0x59] = MOV_E_C, [0x5A] = MOV_E_D, [0x5B] = MOV_E_E,
+    [0x5C] = MOV_E_H, [0x5D] = MOV_E_L, [0x5E] = MOV_E_M, [0x5F] = MOV_E_A,
+
+    /* 0x60 - 0x6F */
+    [0x60] = MOV_H_B, [0x61] = MOV_H_C, [0x62] = MOV_H_D, [0x63] = MOV_H_E,
+    [0x64] = MOV_H_H, [0x65] = MOV_H_L, [0x66] = MOV_H_M, [0x67] = MOV_H_A,
+    [0x68] = MOV_L_B, [0x69] = MOV_L_C, [0x6A] = MOV_L_D, [0x6B] = MOV_L_E,
+    [0x6C] = MOV_L_H, [0x6D] = MOV_L_L, [0x6E] = MOV_L_M, [0x6F] = MOV_L_A,
+
+    /* 0x70 - 0x7F */
+    [0x70] = MOV_M_B, [0x71] = MOV_M_C, [0x72] = MOV_M_D, [0x73] = MOV_M_E,
+    [0x74] = MOV_M_H, [0x75] = MOV_M_L, [0x76] = HLT, [0x77] = MOV_M_A,
+    [0x78] = MOV_A_B, [0x79] = MOV_A_C, [0x7A] = MOV_A_D, [0x7B] = MOV_A_E,
+    [0x7C] = MOV_A_H, [0x7D] = MOV_A_L, [0x7E] = MOV_A_M, [0x7F] = MOV_A_A,
+
+    /* 0x80 - 0x8F (ADD / ADC) */
+    [0x80] = ADD_B, [0x81] = ADD_C, [0x82] = ADD_D, [0x83] = ADD_E,
+    [0x84] = ADD_H, [0x85] = ADD_L, [0x86] = ADD_M, [0x87] = ADD_A,
+    [0x88] = ADC_B, [0x89] = ADC_C, [0x8A] = ADC_D, [0x8B] = ADC_E,
+    [0x8C] = ADC_H, [0x8D] = ADC_L, [0x8E] = ADC_M, [0x8F] = ADC_A,
+
+    /* 0x90 - 0x9F (SUB / SBB) */
+    [0x90] = SUB_B, [0x91] = SUB_C, [0x92] = SUB_D, [0x93] = SUB_E,
+    [0x94] = SUB_H, [0x95] = SUB_L, [0x96] = SUB_M, [0x97] = SUB_A,
+    [0x98] = SBB_B, [0x99] = SBB_C, [0x9A] = SBB_D, [0x9B] = SBB_E,
+    [0x9C] = SBB_H, [0x9D] = SBB_L, [0x9E] = SBB_M, [0x9F] = SBB_A,
+
+    /* 0xA0 - 0xAF (ANA / XRA) */
+    [0xA0] = ANA_B, [0xA1] = ANA_C, [0xA2] = ANA_D, [0xA3] = ANA_E,
+    [0xA4] = ANA_H, [0xA5] = ANA_L, [0xA6] = ANA_M, [0xA7] = ANA_A,
+    [0xA8] = XRA_B, [0xA9] = XRA_C, [0xAA] = XRA_D, [0xAB] = XRA_E,
+    [0xAC] = XRA_H, [0xAD] = XRA_L, [0xAE] = XRA_M, [0xAF] = XRA_A,
+
+    /* 0xB0 - 0xBF (ORA / CMP) */
+    [0xB0] = ORA_B, [0xB1] = ORA_C, [0xB2] = ORA_D, [0xB3] = ORA_E,
+    [0xB4] = ORA_H, [0xB5] = ORA_L, [0xB6] = ORA_M, [0xB7] = ORA_A,
+    [0xB8] = CMP_B, [0xB9] = CMP_C, [0xBA] = CMP_D, [0xBB] = CMP_E,
+    [0xBC] = CMP_H, [0xBD] = CMP_L, [0xBE] = CMP_M, [0xBF] = CMP_A,
+
+    /* 0xC0 - 0xCF (RET/JP/CALL group) */
+    [0xC0] = RNZ, [0xC1] = POP_B, [0xC2] = JNZ, [0xC3] = JMP,
+    [0xC4] = CNZ, [0xC5] = PUSH_B, [0xC6] = ADI, [0xC7] = RST_0,
+    [0xC8] = RZ, [0xC9] = RET, [0xCA] = JZ, [0xCB] = JMP,
+    [0xCC] = CZ, [0xCD] = CALL, [0xCE] = ACI, [0xCF] = RST_1,
+
+    /* 0xD0 - 0xDF */
+    [0xD0] = RNC, [0xD1] = POP_D, [0xD2] = JNC, [0xD3] = OUT,
+    [0xD4] = CNC, [0xD5] = PUSH_D, [0xD6] = SUI, [0xD7] = RST_2,
+    [0xD8] = RC, [0xD9] = RET, [0xDA] = JC, [0xDB] = IN,
+    [0xDC] = CC, [0xDD] = CALL, [0xDE] = SBI, [0xDF] = RST_3,
+
+    /* 0xE0 - 0xEF */
+    [0xE0] = RPO, [0xE1] = POP_H, [0xE2] = JPO, [0xE3] = XTHL,
+    [0xE4] = CPO, [0xE5] = PUSH_H, [0xE6] = ANI, [0xE7] = RST_4,
+    [0xE8] = RPE, [0xE9] = PCHL, [0xEA] = JPE, [0xEB] = XCHG,
+    [0xEC] = CPE, [0xED] = CALL, [0xEE] = XRI, [0xEF] = RST_5,
+
+    /* 0xF0 - 0xFF */
+    [0xF0] = RP, [0xF1] = POP_PSW, [0xF2] = JP, [0xF3] = DI,
+    [0xF4] = CP, [0xF5] = PUSH_PSW, [0xF6] = ORI, [0xF7] = RST_6,
+    [0xF8] = RM, [0xF9] = SPHL, [0xFA] = JM, [0xFB] = EI,
+    [0xFC] = CM, [0xFD] = CALL, [0xFE] = CPI, [0xFF] = RST_7
 };
