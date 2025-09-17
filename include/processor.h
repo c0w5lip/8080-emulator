@@ -1,11 +1,13 @@
-#pragma once
+#ifndef UTILS_H
+#define UTILS_H
 
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "utils.h"
+#include "wrappers.h"
 
-typedef struct Flags
-{
+typedef struct Flags {
     uint8_t S:1;
     uint8_t Z:1;
     uint8_t A:1;
@@ -15,8 +17,7 @@ typedef struct Flags
     uint8_t padding:3;
 } Flags;
 
-typedef struct Processor
-{
+typedef struct Processor {
     uint8_t A, B, C, D, E, H, L;
     uint16_t SP;
     uint16_t PC;
@@ -25,11 +26,10 @@ typedef struct Processor
     uint8_t *memory;
 
     bool is_halted;
+    bool interrupts_enabled;
 
     uint64_t cycle_count;
 } Processor;
-
-
 
 const uint8_t lengths[256] = {
     1, 3, 1, 1, 1, 1, 2, 1, 1, 3, 1, 1, 1, 1, 2, 1,
@@ -49,7 +49,6 @@ const uint8_t lengths[256] = {
     1, 1, 3, 1, 3, 1, 2, 1, 1, 1, 1, 3, 1, 3, 3, 2,
     1, 1, 3, 1, 3, 1, 2, 1, 1, 1, 1, 3, 1, 3, 3, 2
 };
-
 
 const uint8_t cycles[256] = {
     4, 10, 7, 5, 5, 5, 7, 4, 4, 10, 7, 5, 5, 5, 7, 4,
@@ -71,118 +70,7 @@ const uint8_t cycles[256] = {
 };
 
 
-// functions with several opcodes associated
-
-void NOP(Processor *p) {}
-
-
-// functions unique opcode ref
-
-void MOV_B_B(Processor *p) { puts("MOV_B_B called"); p->B = p->B; }
-void MOV_B_C(Processor *p) { puts("MOV_B_C called"); p->B = p->C; }
-void MOV_B_D(Processor *p) { puts("MOV_B_D called"); p->B = p->D; }
-void MOV_B_E(Processor *p) { puts("MOV_B_E called"); p->B = p->E; }
-void MOV_B_H(Processor *p) { puts("MOV_B_H called"); p->B = p->H; }
-void MOV_B_L(Processor *p) { puts("MOV_B_L called"); p->B = p->L; }
-void MOV_B_M(Processor *p) { puts("MOV_B_M called"); uint16_t addr = ((uint16_t)p->H << 8) | p->L; p->B = p->memory[addr]; }
-void MOV_B_A(Processor *p) { puts("MOV_B_A called"); p->B = p->A; }
-
-void MOV_C_B(Processor *p) { puts("MOV_C_B called"); p->C = p->B; }
-void MOV_C_C(Processor *p) { puts("MOV_C_C called"); p->C = p->C; }
-void MOV_C_D(Processor *p) { puts("MOV_C_D called"); p->C = p->D; }
-void MOV_C_E(Processor *p) { puts("MOV_C_E called"); p->C = p->E; }
-void MOV_C_H(Processor *p) { puts("MOV_C_H called"); p->C = p->H; }
-void MOV_C_L(Processor *p) { puts("MOV_C_L called"); p->C = p->L; }
-void MOV_C_M(Processor *p) { puts("MOV_C_M called"); uint16_t addr = ((uint16_t)p->H << 8) | p->L; p->C = p->memory[addr]; }
-void MOV_C_A(Processor *p) { puts("MOV_C_A called"); p->C = p->A; }
-
-void MOV_D_B(Processor *p) { puts("MOV_D_B called"); p->D = p->B; }
-void MOV_D_C(Processor *p) { puts("MOV_D_C called"); p->D = p->C; }
-void MOV_D_D(Processor *p) { puts("MOV_D_D called"); p->D = p->D; }
-void MOV_D_E(Processor *p) { puts("MOV_D_E called"); p->D = p->E; }
-void MOV_D_H(Processor *p) { puts("MOV_D_H called"); p->D = p->H; }
-void MOV_D_L(Processor *p) { puts("MOV_D_L called"); p->D = p->L; }
-void MOV_D_M(Processor *p) { puts("MOV_D_M called"); p->D = p->memory[(p->H >> 8) | (p->L)]; }
-void MOV_D_A(Processor *p) { puts("MOV_D_A called"); p->D = p->A; }
-
-void MOV_E_B(Processor *p) { puts("MOV_E_B called"); p->E = p->B; }
-void MOV_E_C(Processor *p) { puts("MOV_E_C called"); p->E = p->C; }
-void MOV_E_D(Processor *p) { puts("MOV_E_D called"); p->E = p->D; }
-void MOV_E_E(Processor *p) { puts("MOV_E_E called"); p->E = p->E; }
-void MOV_E_H(Processor *p) { puts("MOV_E_H called"); p->E = p->H; }
-void MOV_E_L(Processor *p) { puts("MOV_E_L called"); p->E = p->L; }
-void MOV_E_M(Processor *p) { puts("MOV_E_M called"); p->E = p->memory[(p->H >> 8) | (p->L)]; }
-void MOV_E_A(Processor *p) { puts("MOV_E_A called"); p->E = p->A; }
-
-void MOV_H_B(Processor *p) { puts("MOV_H_B called"); p->H = p->B; }
-void MOV_H_C(Processor *p) { puts("MOV_H_C called"); p->H = p->C; }
-void MOV_H_D(Processor *p) { puts("MOV_H_D called"); p->H = p->D; }
-void MOV_H_E(Processor *p) { puts("MOV_H_E called"); p->H = p->E; }
-void MOV_H_H(Processor *p) { puts("MOV_H_H called"); p->H = p->H; }
-void MOV_H_L(Processor *p) { puts("MOV_H_L called"); p->H = p->L; }
-void MOV_H_M(Processor *p) { puts("MOV_H_M called"); p->H = p->memory[(p->H >> 8) | (p->L)]; }
-void MOV_H_A(Processor *p) { puts("MOV_H_A called"); p->H = p->A; }
-
-void MOV_L_B(Processor *p) { puts("MOV_L_B called"); p->L = p->B; }
-void MOV_L_C(Processor *p) { puts("MOV_L_C called"); p->L = p->C; }
-void MOV_L_D(Processor *p) { puts("MOV_L_D called"); p->L = p->D; }
-void MOV_L_E(Processor *p) { puts("MOV_L_E called"); p->L = p->E; }
-void MOV_L_H(Processor *p) { puts("MOV_L_H called"); p->L = p->H; }
-void MOV_L_L(Processor *p) { puts("MOV_L_L called"); p->L = p->L; }
-void MOV_L_M(Processor *p) { puts("MOV_L_M called"); p->L = p->memory[(p->H >> 8) | (p->L)]; }
-void MOV_L_A(Processor *p) { puts("MOV_L_A called"); p->L = p->A; }
-
-void MOV_M_B(Processor *p) { puts("MOV_M_B called"); p->memory[(p->H >> 8) | (p->L)] = p->B; }
-void MOV_M_C(Processor *p) { puts("MOV_M_C called"); p->memory[(p->H >> 8) | (p->L)] = p->C; }
-void MOV_M_D(Processor *p) { puts("MOV_M_D called"); p->memory[(p->H >> 8) | (p->L)] = p->D; }
-void MOV_M_E(Processor *p) { puts("MOV_M_E called"); p->memory[(p->H >> 8) | (p->L)] = p->E; }
-void MOV_M_H(Processor *p) { puts("MOV_M_H called"); p->memory[(p->H >> 8) | (p->L)] = p->H; }
-void MOV_M_L(Processor *p) { puts("MOV_M_L called"); p->memory[(p->H >> 8) | (p->L)] = p->L; }
-void HLT(Processor *p) { p->is_halted = true; }
-void MOV_M_A(Processor *p) { puts("MOV_M_A called"); p->memory[(p->H >> 8) | (p->L)] = p->A; }
-
-void MOV_A_B(Processor *p) { puts("MOV_A_B called"); p->A = p->B; }
-void MOV_A_C(Processor *p) { puts("MOV_A_C called"); p->A = p->C; }
-void MOV_A_D(Processor *p) { puts("MOV_A_D called"); p->A = p->D; }
-void MOV_A_E(Processor *p) { puts("MOV_A_E called"); p->A = p->E; }
-void MOV_A_H(Processor *p) { puts("MOV_A_H called"); p->A = p->H; }
-void MOV_A_L(Processor *p) { puts("MOV_A_L called"); p->A = p->L; }
-void MOV_A_M(Processor *p) { puts("MOV_A_M called"); p->A = p->memory[(p->H >> 8) | (p->L)]; }
-void MOV_A_A(Processor *p) { puts("MOV_A_A called"); p->A = p->A; }
-
-
-void MVI_B(Processor *p, unsigned char *opcode) { p->B = opcode[1]; }
-void MVI_C(Processor *p, unsigned char *opcode) { p->C = opcode[1]; }
-void MVI_D(Processor *p, unsigned char *opcode) { p->D = opcode[1]; }
-void MVI_E(Processor *p, unsigned char *opcode) { p->E = opcode[1]; }
-void MVI_H(Processor *p, unsigned char *opcode) { p->H = opcode[1]; }
-void MVI_L(Processor *p, unsigned char *opcode) { p->L = opcode[1]; }
-void MVI_M(Processor *p, unsigned char *opcode) { p->memory[(p->H >> 8) | (p->L)] = opcode[1]; }
-void MVI_A(Processor *p, unsigned char *opcode) { p->A = opcode[1]; }
-
-void LXI_B(Processor* p, unsigned char *opcode) { p->B = opcode[2]; p->C = opcode[1]; }
-void LXI_D(Processor* p, unsigned char *opcode) { p->D = opcode[2]; p->E = opcode[1]; }
-void LXI_H(Processor* p, unsigned char *opcode) { p->H = opcode[2]; p->L = opcode[1]; }
-void LXI_SP(Processor* p, unsigned char *opcode) { p->SP = (opcode[2] << 8) | opcode[1]; }
-
-void LDA(Processor *p, unsigned char *opcode) { p->A = p->memory[(opcode[2] << 8) | opcode[1]]; }
-void STA(Processor *p, unsigned char *opcode) { p->memory[(opcode[2] << 8) | opcode[1]] = p->A; }
-
-void LHLD(Processor *p, unsigned char *opcode) {
-    uint16_t address = (opcode[2] << 8) | opcode[1];
-
-    p->H = p->memory[address+1];
-    p->L = p->memory[address];
-}
-
-void SHLD(Processor *p, unsigned char *opcode) {
-    uint16_t address = (opcode[2] << 8) | opcode[1];
-
-    p->memory[address+1] = p->H;
-    p->memory[address] = p->L;
-}
-
-
+// function declarations here
 
 
 void (*instructions[256])(Processor*) = {
@@ -282,3 +170,5 @@ void (*instructions[256])(Processor*) = {
     [0xF8] = RM, [0xF9] = SPHL, [0xFA] = JM, [0xFB] = EI,
     [0xFC] = CM, [0xFD] = CALL, [0xFE] = CPI, [0xFF] = RST_7
 };
+
+#endif

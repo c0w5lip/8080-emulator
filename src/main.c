@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include "../include/main.h"
+#include "../include/processor.h"
 
 
 int main(uint8_t argc, const char* argv[]) {
