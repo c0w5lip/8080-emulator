@@ -335,10 +335,11 @@ void ADD_A(Processor *p, unsigned char *opcode) { add(p, p->A); }
 
 
 
-
-
-
-
-void INR(Processor *p, unsigned char *opcode) {
-    
-}
+void INR_B(Processor *p, unsigned char *opcode) { inr(p, p->B); }
+void INR_C(Processor *p, unsigned char *opcode) { inr(p, p->C); }
+void INR_D(Processor *p, unsigned char *opcode) { inr(p, p->D); }
+void INR_E(Processor *p, unsigned char *opcode) { inr(p, p->E); }
+void INR_H(Processor *p, unsigned char *opcode) { inr(p, p->H); }
+void INR_L(Processor *p, unsigned char *opcode) { inr(p, p->L); }
+void INR_M(Processor *p, unsigned char *opcode) { inr(p, p->memory[(p->H << 8) | (p->L)]); }
+void INR_A(Processor *p, unsigned char *opcode) { inr(p, p->A); }

@@ -7,7 +7,7 @@ Cross platform, uses SDL2 for graphics.
 ⚠️ Project under development. Some functions still need to be implemented, as well as IO and graphics rendering.
 
 
-# About the Intel 8080
+## About the Intel 8080
 
 8-bit microprocessor from 1974, and the first to be used in arcade machines! (Gun Fight)
 
@@ -15,7 +15,12 @@ Cross platform, uses SDL2 for graphics.
 
 https://en.wikipedia.org/wiki/Intel_8080
 
-# Ressources used
+
+## TODO
+
+- ...
+
+## Ressources used
 
 [Instruction set table](https://pastraiser.com/cpu/i8080/i8080_opcodes.html)
 

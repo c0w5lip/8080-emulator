@@ -2,6 +2,25 @@
 
 #include "../include/wrappers.h"
 
+
+
+void push(Processor *p, uint8_t h, uint8_t l) {
+    p->memory[(p->SP)-1] = h;
+    p->memory[(p->SP)-2] = l;
+
+    p->SP -= 2;
+}
+
+void pop(Processor *p, uint8_t *h, uint8_t *l) {
+    h = p->memory[(p->SP)+1];
+    l = p->memory[p->SP];
+
+    p->SP += 2;
+}
+
+
+
+
 void add(Processor *p, uint8_t r) {
     uint16_t result = (uint16_t) p->A + (uint16_t) r;
 
@@ -11,3 +30,30 @@ void add(Processor *p, uint8_t r) {
     p->F.P = is_even(result & 0xFF);
     p->F.C = (result > 0xFF);
 }
+
+
+void inr(Processor *p, uint8_t *r) {
+    uint8_t result = *r + 1;
+    set_flag_zsp(p, result);
+    *r = result;
+}
+
+
+void set_flag_zsp(Processor *p, uint8_t value) {
+    p->F.Z = (value == 0);
+    p->F.S = ((value & 0x80) == 0x80);
+    p->F.P = is_even(value);
+}
+
+// logical operations
+void update_flags_l(Processor *p) {
+    p->F.C = p->F.A = 0;
+    set_flag_zsp(p, p->A);
+}
+
+// arithmetical operations
+void update_flags_a(Processor *p, uint16_t r) {
+    p->F.C = (r > 0xFF);
+    set_flag_zsp(p, r & 0xFF);
+}
+
