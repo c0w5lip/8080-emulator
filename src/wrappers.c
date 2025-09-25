@@ -39,6 +39,14 @@ void inr(Processor *p, uint8_t *r) {
 }
 
 
+void dcr(Processor *p, uint8_t *r) {
+    uint8_t result = *r - 1;
+    set_flag_zsp(p, result);
+    *r = result;
+}
+
+
+
 void set_flag_zsp(Processor *p, uint8_t value) {
     p->F.Z = (value == 0);
     p->F.S = ((value & 0x80) == 0x80);

@@ -343,3 +343,12 @@ void INR_H(Processor *p, unsigned char *opcode) { inr(p, p->H); }
 void INR_L(Processor *p, unsigned char *opcode) { inr(p, p->L); }
 void INR_M(Processor *p, unsigned char *opcode) { inr(p, p->memory[(p->H << 8) | (p->L)]); }
 void INR_A(Processor *p, unsigned char *opcode) { inr(p, p->A); }
+
+void DCR_B(Processor *p, unsigned char *opcode) { dcr(p, p->B); }
+void DCR_C(Processor *p, unsigned char *opcode) { dcr(p, p->C); }
+void DCR_D(Processor *p, unsigned char *opcode) { dcr(p, p->D); }
+void DCR_E(Processor *p, unsigned char *opcode) { dcr(p, p->E); }
+void DCR_H(Processor *p, unsigned char *opcode) { dcr(p, p->H); }
+void DCR_L(Processor *p, unsigned char *opcode) { dcr(p, p->L); }
+void DCR_M(Processor *p, unsigned char *opcode) { dcr(p, p->memory[(p->H << 8) | (p->L)]); }
+void DCR_A(Processor *p, unsigned char *opcode) { dcr(p, p->A); }

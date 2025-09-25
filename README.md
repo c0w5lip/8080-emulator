@@ -15,6 +15,8 @@ Cross platform, uses SDL2 for graphics.
 
 https://en.wikipedia.org/wiki/Intel_8080
 
+[Arcade machines & games using the 8080](https://www.system16.com/list.php?type=h&search=8080)
+
 
 ## TODO
 
