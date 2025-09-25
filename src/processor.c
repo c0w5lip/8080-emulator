@@ -335,20 +335,42 @@ void ADD_A(Processor *p, unsigned char *opcode) { add(p, p->A); }
 
 
 
-void INR_B(Processor *p, unsigned char *opcode) { inr(p, p->B); }
-void INR_C(Processor *p, unsigned char *opcode) { inr(p, p->C); }
-void INR_D(Processor *p, unsigned char *opcode) { inr(p, p->D); }
-void INR_E(Processor *p, unsigned char *opcode) { inr(p, p->E); }
-void INR_H(Processor *p, unsigned char *opcode) { inr(p, p->H); }
-void INR_L(Processor *p, unsigned char *opcode) { inr(p, p->L); }
-void INR_M(Processor *p, unsigned char *opcode) { inr(p, p->memory[(p->H << 8) | (p->L)]); }
-void INR_A(Processor *p, unsigned char *opcode) { inr(p, p->A); }
+void INR_B(Processor *p, unsigned char *opcode) { inr(p, &p->B); }
+void INR_C(Processor *p, unsigned char *opcode) { inr(p, &p->C); }
+void INR_D(Processor *p, unsigned char *opcode) { inr(p, &p->D); }
+void INR_E(Processor *p, unsigned char *opcode) { inr(p, &p->E); }
+void INR_H(Processor *p, unsigned char *opcode) { inr(p, &p->H); }
+void INR_L(Processor *p, unsigned char *opcode) { inr(p, &p->L); }
+void INR_M(Processor *p, unsigned char *opcode) { inr(p, &p->memory[(p->H << 8) | (p->L)]); }
+void INR_A(Processor *p, unsigned char *opcode) { inr(p, &p->A); }
 
-void DCR_B(Processor *p, unsigned char *opcode) { dcr(p, p->B); }
-void DCR_C(Processor *p, unsigned char *opcode) { dcr(p, p->C); }
-void DCR_D(Processor *p, unsigned char *opcode) { dcr(p, p->D); }
-void DCR_E(Processor *p, unsigned char *opcode) { dcr(p, p->E); }
-void DCR_H(Processor *p, unsigned char *opcode) { dcr(p, p->H); }
-void DCR_L(Processor *p, unsigned char *opcode) { dcr(p, p->L); }
-void DCR_M(Processor *p, unsigned char *opcode) { dcr(p, p->memory[(p->H << 8) | (p->L)]); }
-void DCR_A(Processor *p, unsigned char *opcode) { dcr(p, p->A); }
+void DCR_B(Processor *p, unsigned char *opcode) { dcr(p, &p->B); }
+void DCR_C(Processor *p, unsigned char *opcode) { dcr(p, &p->C); }
+void DCR_D(Processor *p, unsigned char *opcode) { dcr(p, &p->D); }
+void DCR_E(Processor *p, unsigned char *opcode) { dcr(p, &p->E); }
+void DCR_H(Processor *p, unsigned char *opcode) { dcr(p, &p->H); }
+void DCR_L(Processor *p, unsigned char *opcode) { dcr(p, &p->L); }
+void DCR_M(Processor *p, unsigned char *opcode) { dcr(p, &p->memory[(p->H << 8) | (p->L)]); }
+void DCR_A(Processor *p, unsigned char *opcode) { dcr(p, &p->A); }
+
+void PUSH_B(Processor *p, unsigned char *opcode) { push(p, p->B, p->C); }
+void PUSH_D(Processor *p, unsigned char *opcode) { push(p, p->D, p->E); }
+void PUSH_H(Processor *p, unsigned char *opcode) { push(p, p->H, p->L); }
+void PUSH_PSW(Processor *p, unsigned char *opcode) {
+    push(p, p->A, (p->F.Z << 0 | p->F.S << 1 | p->F.P << 2 | p->F.C << 3 | p->F.A << 4));
+}
+
+
+void POP_B(Processor *p, unsigned char *opcode) { pop(p, &p->B, &p->C); }
+void POP_E(Processor *p, unsigned char *opcode) { pop(p, &p->D, &p->E); }
+void POP_H(Processor *p, unsigned char *opcode) { pop(p, &p->H, &p->L); }
+void POP_PSW(Processor *p, unsigned char *opcode) { 
+    p->A = p->memory[p->SP+1];
+    p->F.Z = (0x01 == (p->memory[p->SP] & 0x01));
+    p->F.S = (0x02 == (p->memory[p->SP] & 0x02));
+    p->F.P = (0x04 == (p->memory[p->SP] & 0x04));
+    p->F.C = (0x08 == (p->memory[p->SP] & 0x08));
+    p->F.A = (0x10 == (p->memory[p->SP] & 0x10));
+
+    p->SP += 2;
+ }
