@@ -1,10 +1,10 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef PROCESSOR_H
+#define PROCESSOR_H
 
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "utils.h"
+#include "helpers.h"
 #include "wrappers.h"
 
 typedef struct Flags {

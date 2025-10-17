@@ -32,6 +32,16 @@ void add(Processor *p, uint8_t r) {
 }
 
 
+void ana(Processor *p, uint8_t r) {
+    p->A = p->A & r;
+
+    p->F.S = (0x80 == (p->A & 0x80));
+    p->F.Z = ((p->A & 0xFF) == 0);
+    p->F.P = is_even(p->A & 0xFF);
+    p->F.C = 0;
+}
+
+
 void sub(Processor *p, uint8_t r) {
     uint16_t result = (uint16_t) p->A - (uint16_t) r;
 
@@ -55,6 +65,22 @@ void adc(Processor *p, uint8_t r) {
     update_flags_a(p, r);
     p->A = result & 0xFF;
 }
+
+
+void xra(Processor *p, uint8_t r) {
+    p->A = p->A ^ r;
+
+    update_flags_l(p);
+}
+
+
+
+void ora(Processor *p, uint8_t r) {
+    p->A = p->A | r;
+
+    update_flags_l(p);
+}
+
 
 
 void inr(Processor *p, uint8_t *r) {

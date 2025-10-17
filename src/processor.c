@@ -335,6 +335,19 @@ void ADD_A(Processor *p, unsigned char *opcode) { add(p, p->A); }
 
 
 
+void ANA_B(Processor *p, unsigned char *opcode) { ana(p, p->B); }
+void ANA_C(Processor *p, unsigned char *opcode) { ana(p, p->C); }
+void ANA_D(Processor *p, unsigned char *opcode) { ana(p, p->D); }
+void ANA_E(Processor *p, unsigned char *opcode) { ana(p, p->E); }
+void ANA_H(Processor *p, unsigned char *opcode) { ana(p, p->H); }
+void ANA_L(Processor *p, unsigned char *opcode) { ana(p, p->L); }
+void ANA_M(Processor *p, unsigned char *opcode) { ana(p, p->memory[(p->H << 8) | (p->L)]); }
+void ANA_A(Processor *p, unsigned char *opcode) { ana(p, p->A); }
+
+
+
+
+
 void ADC_B(Processor *p, unsigned char *opcode) { adc(p, p->B); }
 void ADC_C(Processor *p, unsigned char *opcode) { adc(p, p->C); }
 void ADC_D(Processor *p, unsigned char *opcode) { adc(p, p->D); }
@@ -383,6 +396,33 @@ void DCR_H(Processor *p, unsigned char *opcode) { dcr(p, &p->H); }
 void DCR_L(Processor *p, unsigned char *opcode) { dcr(p, &p->L); }
 void DCR_M(Processor *p, unsigned char *opcode) { dcr(p, &p->memory[(p->H << 8) | (p->L)]); }
 void DCR_A(Processor *p, unsigned char *opcode) { dcr(p, &p->A); }
+
+
+void XRA_B(Processor *p, unsigned char *opcode) { xra(p, &p->B); }
+void XRA_C(Processor *p, unsigned char *opcode) { xra(p, &p->C); }
+void XRA_D(Processor *p, unsigned char *opcode) { xra(p, &p->D); }
+void XRA_E(Processor *p, unsigned char *opcode) { xra(p, &p->E); }
+void XRA_H(Processor *p, unsigned char *opcode) { xra(p, &p->H); }
+void XRA_L(Processor *p, unsigned char *opcode) { xra(p, &p->L); }
+void XRA_M(Processor *p, unsigned char *opcode) { xra(p, &p->memory[(p->H << 8) | (p->L)]); }
+void XRA_A(Processor *p, unsigned char *opcode) { xra(p, &p->A); }
+
+
+
+
+void ORA_B(Processor *p, unsigned char *opcode) { ora(p, &p->B); }
+void ORA_C(Processor *p, unsigned char *opcode) { ora(p, &p->C); }
+void ORA_D(Processor *p, unsigned char *opcode) { ora(p, &p->D); }
+void ORA_E(Processor *p, unsigned char *opcode) { ora(p, &p->E); }
+void ORA_H(Processor *p, unsigned char *opcode) { ora(p, &p->H); }
+void ORA_L(Processor *p, unsigned char *opcode) { ora(p, &p->L); }
+void ORA_M(Processor *p, unsigned char *opcode) { ora(p, &p->memory[(p->H << 8) | (p->L)]); }
+void ORA_A(Processor *p, unsigned char *opcode) { ora(p, &p->A); }
+
+
+
+
+
 
 void PUSH_B(Processor *p, unsigned char *opcode) { push(p, p->B, p->C); }
 void PUSH_D(Processor *p, unsigned char *opcode) { push(p, p->D, p->E); }
