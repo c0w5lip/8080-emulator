@@ -421,6 +421,16 @@ void ORA_A(Processor *p, unsigned char *opcode) { ora(p, &p->A); }
 
 
 
+void CMP_B(Processor *p, unsigned char *opcode) { cmp(p, &p->B); }
+void CMP_C(Processor *p, unsigned char *opcode) { cmp(p, &p->C); }
+void CMP_D(Processor *p, unsigned char *opcode) { cmp(p, &p->D); }
+void CMP_E(Processor *p, unsigned char *opcode) { cmp(p, &p->E); }
+void CMP_H(Processor *p, unsigned char *opcode) { cmp(p, &p->H); }
+void CMP_L(Processor *p, unsigned char *opcode) { cmp(p, &p->L); }
+void CMP_M(Processor *p, unsigned char *opcode) { cmp(p, &p->memory[(p->H << 8) | (p->L)]); }
+void CMP_A(Processor *p, unsigned char *opcode) { cmp(p, &p->A); }
+
+
 
 
 

@@ -97,7 +97,11 @@ void dcr(Processor *p, uint8_t *r) {
 }
 
 
+void cmp(Processor *p, uint8_t *r) {
+    uint8_t result = p->A - *r;
 
+    update_flags_a(p, result);
+}
 
 
 
