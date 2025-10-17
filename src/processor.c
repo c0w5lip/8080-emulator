@@ -335,6 +335,37 @@ void ADD_A(Processor *p, unsigned char *opcode) { add(p, p->A); }
 
 
 
+void ADC_B(Processor *p, unsigned char *opcode) { adc(p, p->B); }
+void ADC_C(Processor *p, unsigned char *opcode) { adc(p, p->C); }
+void ADC_D(Processor *p, unsigned char *opcode) { adc(p, p->D); }
+void ADC_E(Processor *p, unsigned char *opcode) { adc(p, p->E); }
+void ADC_H(Processor *p, unsigned char *opcode) { adc(p, p->H); }
+void ADC_L(Processor *p, unsigned char *opcode) { adc(p, p->L); }
+void ADC_M(Processor *p, unsigned char *opcode) { adc(p, p->memory[(p->H << 8) | (p->L)]); }
+void ADC_A(Processor *p, unsigned char *opcode) { adc(p, p->A); }
+
+
+void SUB_B(Processor *p, unsigned char *opcode) { sub(p, p->B); }
+void SUB_C(Processor *p, unsigned char *opcode) { sub(p, p->C); }
+void SUB_D(Processor *p, unsigned char *opcode) { sub(p, p->D); }
+void SUB_E(Processor *p, unsigned char *opcode) { sub(p, p->E); }
+void SUB_H(Processor *p, unsigned char *opcode) { sub(p, p->H); }
+void SUB_L(Processor *p, unsigned char *opcode) { sub(p, p->L); }
+void SUB_M(Processor *p, unsigned char *opcode) { sub(p, p->memory[(p->H << 8) | (p->L)]); }
+void SUB_A(Processor *p, unsigned char *opcode) { sub(p, p->A); }
+
+
+void SBB_B(Processor *p, unsigned char *opcode) { sbb(p, p->B); }
+void SBB_C(Processor *p, unsigned char *opcode) { sbb(p, p->C); }
+void SBB_D(Processor *p, unsigned char *opcode) { sbb(p, p->D); }
+void SBB_E(Processor *p, unsigned char *opcode) { sbb(p, p->E); }
+void SBB_H(Processor *p, unsigned char *opcode) { sbb(p, p->H); }
+void SBB_L(Processor *p, unsigned char *opcode) { sbb(p, p->L); }
+void SBB_M(Processor *p, unsigned char *opcode) { sbb(p, p->memory[(p->H << 8) | (p->L)]); }
+void SBB_A(Processor *p, unsigned char *opcode) { sbb(p, p->A); }
+
+
+
 void INR_B(Processor *p, unsigned char *opcode) { inr(p, &p->B); }
 void INR_C(Processor *p, unsigned char *opcode) { inr(p, &p->C); }
 void INR_D(Processor *p, unsigned char *opcode) { inr(p, &p->D); }
@@ -373,4 +404,4 @@ void POP_PSW(Processor *p, unsigned char *opcode) {
     p->F.A = (0x10 == (p->memory[p->SP] & 0x10));
 
     p->SP += 2;
- }
+}

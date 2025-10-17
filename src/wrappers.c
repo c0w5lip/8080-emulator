@@ -32,6 +32,31 @@ void add(Processor *p, uint8_t r) {
 }
 
 
+void sub(Processor *p, uint8_t r) {
+    uint16_t result = (uint16_t) p->A - (uint16_t) r;
+
+    update_flags_a(p, r);
+    p->A = result & 0xFF;
+}
+
+void sbb(Processor *p, uint8_t r) {
+    uint16_t result = (uint16_t) p->A - (uint16_t) r - p->F.C;
+
+    update_flags_a(p, r);
+    p->A = result & 0xFF;
+}
+
+
+
+
+void adc(Processor *p, uint8_t r) {
+    uint16_t result = (uint16_t) p->A + (uint16_t) r;
+
+    update_flags_a(p, r);
+    p->A = result & 0xFF;
+}
+
+
 void inr(Processor *p, uint8_t *r) {
     uint8_t result = *r + 1;
     set_flag_zsp(p, result);
@@ -53,14 +78,14 @@ void set_flag_zsp(Processor *p, uint8_t value) {
     p->F.P = is_even(value);
 }
 
-// logical operations
-void update_flags_l(Processor *p) {
+
+void update_flags_l(Processor *p) { // logical operations
     p->F.C = p->F.A = 0;
     set_flag_zsp(p, p->A);
 }
 
-// arithmetical operations
-void update_flags_a(Processor *p, uint16_t r) {
+
+void update_flags_a(Processor *p, uint16_t r) { // arithmetical operations
     p->F.C = (r > 0xFF);
     set_flag_zsp(p, r & 0xFF);
 }
