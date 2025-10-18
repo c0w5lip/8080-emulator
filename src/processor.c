@@ -179,9 +179,149 @@ void DCX_SP(Processor *p, unsigned char *opcode) {
     p->SP--;
 }
 
+
+
+
+void DAD_B(Processor* p, unsigned char *opcode) {
+    uint32_t r = ((p->H  << 8) | p->L) + ((p->B << 8) | p->C);
+
+    p->H = (r & 0xFF00) >> 8;
+    p->L = (r & 0xFF);
+
+    if (r > 0xFFFF) {
+        p->F.C = 1;
+    } else {
+        p->F.C = 0;
+    }
+}
+
+void DAD_D(Processor* p, unsigned char *opcode) {
+    uint32_t r = ((p->H  << 8) | p->L) + ((p->D << 8) | p->E);
+
+    p->H = (r & 0xFF00) >> 8;
+    p->L = (r & 0xFF);
+
+    if (r > 0xFFFF) {
+        p->F.C = 1;
+    } else {
+        p->F.C = 0;
+    }
+}
+
+
+void DAD_H(Processor* p, unsigned char *opcode) {
+    uint32_t r = ((p->H << 8) | p->L) + ((p->H  << 8) | p->L); // = *2
+
+    p->H = (r & 0xFF00) >> 8;
+    p->L = (r & 0xFF);
+
+    if (r > 0xFFFF) {
+        p->F.C = 1;
+    } else {
+        p->F.C = 0;
+    }
+}
+
+
+void DAD_SP(Processor* p, unsigned char *opcode) {
+    uint32_t r = ((p->H  << 8) | p->L) + p->SP;
+
+    p->H = (r & 0xFF00) >> 8;
+    p->L = (r & 0xFF);
+
+    if (r > 0xFFFF) {
+        p->F.C = 1;
+    } else {
+        p->F.C = 0;
+    }
+}
+
+
+
+
+
+void RLC(Processor *p, unsigned char *opcode) {
+    uint8_t a = p->A;
+
+    p->A = ((a & 0x80) >> 7) | (a << 1);
+    p->F.C = ((a & 0x80) == 0x80);  
+}
+
+void RRC(Processor *p, unsigned char *opcode) {
+    uint8_t a = p->A;
+
+    p->A = ((a & 1) << 7) | (a >> 1);
+    p->F.C = ((a & 1) == 1); 
+}
+
+void RAL(Processor *p, unsigned char *opcode) {
+    uint8_t a = p->A;
+
+    p->A = (a << 1) | (p->F.C & 0x1);
+    p->F.C = ((a & 0x80) == 0x80);
+}
+
+void RAR(Processor *p, unsigned char *opcode) {
+    uint8_t a = p->A;
+
+    p->A = (p->F.C << 7) | (a >> 1);
+    p->F.C = ((a & 1) == 1);
+}
+
+
+
+
+
+
+void ADI(Processor *p, unsigned char *opcode) {
+    p->A += opcode[1];
+}
+
+
+void ACI(Processor *p, unsigned char *opcode) {
+    uint16_t r = p->A + opcode[1] + p->F.C;
+
+    p->A = r;
+
+    set_flag_zsp(p, r);
+    p->F.C = r > 0xFF;
+    p->A = r & 0xFF;
+}
+
+
+
+void RNC(Processor *p, unsigned char *opcode) {
+    if (p->F.C == 0) {
+        RET(p, opcode);
+    }
+}
+
+
+void RC(Processor *p, unsigned char *opcode) {
+    if (p->F.C != 0) {
+        RET(p, opcode);
+    }
+}
+
+
+
+
+
+
+
+
+
 void CMA(Processor *p, unsigned char *opcode) {
     p->A = ~(p->A);
 }
+
+
+void CMC(Processor *p, unsigned char *opcode) {
+    p->F.C = ~(p->F.C);
+}
+
+
+
 
 void STC(Processor *p, unsigned char *opcode) { p->F.C = 1; }
 void STC(Processor *p, unsigned char *opcode) { p->F.C = 1; }
@@ -255,7 +395,7 @@ void RNZ(Processor *p, unsigned char *opcode) {
 
 
 void CALL(Processor *p, unsigned char *opcode) {
-    PUSH(p->PC);
+    push(p->PC, 0, 0); // TODO: adapt push()
     JMP(p, opcode);
 }
 
@@ -318,6 +458,20 @@ void SPHL(Processor *p, unsigned char *opcode) {
 }
 
 
+
+
+
+void DAA(Processor *p, unsigned char *opcode) {
+    if ((p->A & 0xF) > 9) {
+        p->A += 6;
+    }
+    
+    if ((p->A & 0xF0) > 0x90) {
+        uint16_t r = (uint16_t) p->A + 0x60;
+        ArithFlagsA(p, r);
+        p->A = r & 0xFF;
+    }
+}
 
 
 
@@ -434,6 +588,16 @@ void CMP_A(Processor *p, unsigned char *opcode) { cmp(p, &p->A); }
 
 
 
+void RST_0(Processor *p, unsigned char *opcode) { rst(p, 0*8); }
+void RST_1(Processor *p, unsigned char *opcode) { rst(p, 1*8); }
+void RST_2(Processor *p, unsigned char *opcode) { rst(p, 2*8); }
+void RST_3(Processor *p, unsigned char *opcode) { rst(p, 3*8); }
+void RST_4(Processor *p, unsigned char *opcode) { rst(p, 4*8); }
+void RST_5(Processor *p, unsigned char *opcode) { rst(p, 5*8); }
+void RST_6(Processor *p, unsigned char *opcode) { rst(p, 6*8); }
+void RST_7(Processor *p, unsigned char *opcode) { rst(p, 7*8); }
+
+
 void PUSH_B(Processor *p, unsigned char *opcode) { push(p, p->B, p->C); }
 void PUSH_D(Processor *p, unsigned char *opcode) { push(p, p->D, p->E); }
 void PUSH_H(Processor *p, unsigned char *opcode) { push(p, p->H, p->L); }
@@ -443,7 +607,7 @@ void PUSH_PSW(Processor *p, unsigned char *opcode) {
 
 
 void POP_B(Processor *p, unsigned char *opcode) { pop(p, &p->B, &p->C); }
-void POP_E(Processor *p, unsigned char *opcode) { pop(p, &p->D, &p->E); }
+void POP_D(Processor *p, unsigned char *opcode) { pop(p, &p->D, &p->E); }
 void POP_H(Processor *p, unsigned char *opcode) { pop(p, &p->H, &p->L); }
 void POP_PSW(Processor *p, unsigned char *opcode) { 
     p->A = p->memory[p->SP+1];
@@ -455,3 +619,17 @@ void POP_PSW(Processor *p, unsigned char *opcode) {
 
     p->SP += 2;
 }
+
+
+
+
+void CNC(Processor *p, unsigned char *opcode) {
+    if (p->F.C == 0) {
+        CALL(p, opcode);
+        
+        p->PC -= lengths[opcode[0]]; // cancel future incrementation of PC
+    }
+}
+
+
+

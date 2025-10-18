@@ -4,9 +4,26 @@
 
 
 
+
+
+
+void rst(Processor *p, uint8_t offset)
+{
+    uint16_t pc = p->PC + 3;
+
+    p->memory[(p->SP) - 1] = (pc >> 8) & 0xFF;
+    p->memory[(p->SP) - 2] = pc & 0xFF;
+    p->SP -= 2;
+
+    p->PC = offset;
+}
+
+
+
+
 void push(Processor *p, uint8_t h, uint8_t l) {
-    p->memory[(p->SP)-1] = h;
-    p->memory[(p->SP)-2] = l;
+    p->memory[(p->SP) - 1] = h;
+    p->memory[(p->SP) - 2] = l;
 
     p->SP -= 2;
 }

@@ -20,7 +20,11 @@ https://en.wikipedia.org/wiki/Intel_8080
 
 ## TODO
 
-- ...
+- Implement missing instructions
+- Implement IO operations
+- Implement graphics rendering
+
+- For each operation with a condition (e.g CNC), cancel the increment of PC if the condition is met
 
 ## Ressources used
 
