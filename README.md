@@ -1,8 +1,7 @@
 # 8080-emulator
+
 Intel 8080 emulator written in ANSI C, for learning purposes.
-
 Cross platform, uses SDL2 for graphics.
-
 
 ⚠️ Project under development. Some functions still need to be implemented, as well as IO and graphics rendering.
 
@@ -20,13 +19,14 @@ https://en.wikipedia.org/wiki/Intel_8080
 
 ## TODO
 
-- Implement missing instructions
 - Implement IO operations
 - Implement graphics rendering
+- [Tests](https://stackoverflow.com/questions/13751489/intel-8080-emulator-tester) (?)
 
-- For each operation with a condition (e.g CNC), cancel the increment of PC if the condition is met
 
 ## Ressources used
+
+[8080 Programmers manual](https://altairclone.com/downloads/manuals/8080%20Programmers%20Manual.pdf)
 
 [Instruction set table](https://pastraiser.com/cpu/i8080/i8080_opcodes.html)
 

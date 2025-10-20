@@ -4,6 +4,8 @@
 #include "processor.h"
 
 
+void rst(Processor *p, uint8_t offset);
+
 void push(Processor *p, uint8_t h, uint8_t l);
 void pop(Processor *p, uint8_t *h, uint8_t *l);
 

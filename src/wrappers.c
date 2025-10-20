@@ -1,10 +1,5 @@
-#include <stdlib.h>
-
 #include "../include/wrappers.h"
-
-
-
-
+#include "../include/helpers.h"
 
 
 void rst(Processor *p, uint8_t offset)
@@ -29,8 +24,8 @@ void push(Processor *p, uint8_t h, uint8_t l) {
 }
 
 void pop(Processor *p, uint8_t *h, uint8_t *l) {
-    h = p->memory[(p->SP)+1];
-    l = p->memory[p->SP];
+    *h = p->memory[(p->SP)+1];
+    *l = p->memory[p->SP];
 
     p->SP += 2;
 }
@@ -114,15 +109,9 @@ void dcr(Processor *p, uint8_t *r) {
 }
 
 
-void cmp(Processor *p, uint8_t *r) {
-    uint8_t result = p->A - *r;
+void cmp(Processor *p, uint8_t r) {
+    uint8_t result = p->A - r;
 
     update_flags_a(p, result);
 }
-
-
-
-
-
-
 

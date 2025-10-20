@@ -5,7 +5,7 @@
 #include "../include/processor.h"
 
 
-int main(uint8_t argc, const char* argv[]) {
+int main(int argc, char* argv[]) {
     
     if (argc != 2) {
         puts("Usage: ./emulator <program.rom>\n");
@@ -36,21 +36,20 @@ int main(uint8_t argc, const char* argv[]) {
     fclose(program_file);
 
     p->PC = 0;
-    while (p->PC < 16) { // while (!pc->is_halted) eventually
-        uint8_t opcode = p->memory[p->PC]; // fetch
+    while (!p->is_halted && p->PC < 1600) {
+        unsigned char *opcode = &p->memory[p->PC]; // fetch
+        unsigned char opcode_i = opcode[0];
+        uint16_t PC_save = p->PC;
 
-        printf("Fetching %2x\n", opcode);
+        printf("Fetching %2x\n", opcode_i);
 
-        if (!instructions[opcode]) {
-            puts("Not supported!"); // all instructions must be supported eventually
-            p->PC++;
-            continue;
+        instructions[opcode_i](p, opcode); // execute
+        
+        if (p->PC == PC_save) { // if PC has been updated (e.g sucessful CNC), it must not be incremented
+            p->PC += lengths[opcode_i]; // increment PC
         }
-
-        instructions[opcode](p, opcode); // execute
-
-        p->PC += lengths[opcode]; // increment pc
-        p->cycle_count += cycles[opcode]; // update cycles
+        
+        p->cycle_count += cycles[opcode_i]; // increment cycle_counts
     }
 
     free(p->memory);

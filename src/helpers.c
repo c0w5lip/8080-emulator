@@ -14,8 +14,6 @@ int is_even(int a) {
 }
 
 
-
-
 void set_flag_zsp(Processor *p, uint8_t value) {
     p->F.Z = (value == 0);
     p->F.S = ((value & 0x80) == 0x80);
